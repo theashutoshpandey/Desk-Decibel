@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Desk Decibel - Silently informed. Effortlessly productive</title>
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .top-bar {
+            background: #f5f5f5;
+            padding: 10px 30px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .address-book-btn {
+            background: #4caf50;
+            color: #fff;
+            padding: 8px 16px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .address-book-btn:hover {
+            background: #45a049;
+        }
+
+        .container {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+        }
+
+        .form-container {
+            background: #fff;
+            width: 100%;
+            max-width: 480px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .logo img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        h2 span {
+            color: #4caf50;
+        }
+
+        .tagline {
+            text-align: center;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            font-size: 17px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+            display: block;
+            margin-top: 15px;
+        }
+
+        select,
+        input[type=text],
+        input[type=password] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type=text]#custom-hostname {
+            margin-top: 5px;
+            border-style: dashed;
+            font-size: 14px;
+            color: #555;
+        }
+
+        select:focus,
+        input[type=text]:focus,
+        input[type=password]:focus {
+            border-color: #4caf50;
+            outline: none;
+        }
+
+        input[type=submit] {
+            width: 100%;
+            background: #4caf50;
+            color: #fff;
+            font-size: 16px;
+            padding: 14px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        input[type=submit]:hover {
+            background: #45a049;
+        }
+
+        .alert {
+            display: none;
+            background: #f44336;
+            color: #fff;
+            padding: 12px;
+            margin-top: 20px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .footer {
+            margin-top: 15px;
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: absolute;
+            top: 100%;
+            /* right below button */
+            right: 0;
+            margin-top: 6px;
+            width: 320px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            padding: 15px 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .modal-content {
+            margin: 0;
+            padding: 0;
+            box-shadow: none;
+            border-radius: 0;
+            position: relative;
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4caf50;
+            margin-bottom: 15px;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 15px;
+            font-size: 1.5rem;
+            color: #aaa;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: #000;
+        }
+
+        .address-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .address-list-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .address-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .address-list-item button {
+            background: transparent;
+            border: none;
+            color: #f44336;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 1;
+            padding: 0;
+        }
+
+        .address-list-item button:hover {
+            color: #c62828;
+        }
+
+        .add-address-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .add-address-container input {
+            flex-grow: 1;
+            padding: 8px 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .add-address-container button {
+            background: #4caf50;
+            border: none;
+            color: #fff;
+            padding: 8px 14px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-address-container button:hover {
+            background: #45a049;
+        }
+
+        /* Responsive */
+        @media(max-width: 600px) {
+            .form-container {
+                padding: 20px 15px;
+                max-width: 95%;
+            }
+
+            .logo img {
+                max-width: 80px;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="top-bar">
+    <div style="position: relative; display: inline-block;">
+        <button class="address-book-btn" onclick="toggleAddressBook()" id="addressBookBtn" aria-haspopup="true"
+                aria-expanded="false">
+            Address Book
+        </button>
+        <div id="addressBookModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"
+             tabindex="-1">
+            <div class="modal-content">
+                <button class="close-btn" aria-label="Close address book"
+                        onclick="closeAddressBook()">&times;</button>
+                <div class="modal-header" id="modalTitle">Address Book</div>
+
+                <div class="address-list" id="addressList">
+                    <!-- Hostnames dynamically added here -->
+                </div>
+
+                <div class="add-address-container">
+                    <input type="text" id="newAddressInput" placeholder="Add new hostname or IP"
+                           aria-label="New hostname or IP" />
+                    <button onclick="addNewAddress()">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="form-container" role="main">
+        <div class="logo">
+            <img src="logo.png" alt="Desk Decibel Logo" />
+        </div>
+
+        <h2><span>Desk</span> Decibel</h2>
+        <p class="tagline">
+            Live productivity monitoring in stealth mode. <br />
+            <strong style="font-size: 0.875rem;">Silently informed. Effortlessly productive.</strong>
+        </p>
+        <form id="myForm" onsubmit="submitForm(event)" novalidate>
+            <label for="hostname">Hostname:</label>
+            <select id="hostname" name="hostname" required>
+                <option value="">Select a hostname</option>
+            </select>
+            <input type="text" id="custom-hostname" placeholder="Or type manually" oninput="syncCustomHostname()"
+                   aria-label="Custom Hostname" />
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required />
+
+            <input type="submit" value="Connect" />
+        </form>
+
+        <div id="alertBox" class="alert" role="alert" aria-live="assertive"></div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 Desk Decibel. All rights reserved.</p>
+    </footer>
+</div>
+
+<script>
+    const hostnameDropdown = document.getElementById("hostname");
+    const customHostnameInput = document.getElementById("custom-hostname");
+    const addressList = document.getElementById("addressList");
+    const addressBookModal = document.getElementById("addressBookModal");
+    const newAddressInput = document.getElementById("newAddressInput");
+    const alertBox = document.getElementById("alertBox");
+    const addressBookBtn = document.getElementById("addressBookBtn"); // make sure your button has this id
+
+    function loadAddresses() {
+        const saved = localStorage.getItem("deskDecibelAddresses");
+        return saved ? JSON.parse(saved) : ["host1.local", "192.168.1.5", "server.example.com"];
+    }
+
+    function saveAddresses(addresses) {
+        localStorage.setItem("deskDecibelAddresses", JSON.stringify(addresses));
+    }
+
+    function populateDropdown() {
+        const addresses = loadAddresses();
+        hostnameDropdown.innerHTML = '<option value="">Select a hostname</option>';
+        addresses.forEach(host => {
+            const option = document.createElement("option");
+            option.value = host;
+            option.textContent = host;
+            hostnameDropdown.appendChild(option);
+        });
+    }
+
+    function populateAddressList() {
+        const addresses = loadAddresses();
+        addressList.innerHTML = "";
+
+        if (addresses.length === 0) {
+            const emptyMsg = document.createElement("div");
+            emptyMsg.style.textAlign = "center";
+            emptyMsg.style.color = "#777";
+            emptyMsg.style.fontStyle = "italic";
+            emptyMsg.textContent = "No addresses saved.";
+            addressList.appendChild(emptyMsg);
+            return;
+        }
+
+        addresses.forEach((host, idx) => {
+            const item = document.createElement("div");
+            item.className = "address-list-item";
+
+            const span = document.createElement("span");
+            span.textContent = host;
+
+            const removeBtn = document.createElement("button");
+            removeBtn.textContent = "×";
+            removeBtn.title = `Remove ${host}`;
+            removeBtn.setAttribute("aria-label", `Remove ${host}`);
+            removeBtn.onclick = () => {
+                removeAddress(idx);
+            };
+
+            item.appendChild(span);
+            item.appendChild(removeBtn);
+            addressList.appendChild(item);
+        });
+    }
+
+    function openAddressBook() {
+        populateAddressList();
+        newAddressInput.value = "";
+        addressBookModal.style.display = "block";
+        newAddressInput.focus();
+        addressBookBtn.setAttribute("aria-expanded", "true");
+    }
+
+    function closeAddressBook() {
+        addressBookModal.style.display = "none";
+        addressBookBtn.setAttribute("aria-expanded", "false");
+    }
+
+    function toggleAddressBook() {
+        if (addressBookModal.style.display === "block") {
+            closeAddressBook();
+        } else {
+            openAddressBook();
+        }
+    }
+
+    function addNewAddress() {
+        const newAddr = newAddressInput.value.trim();
+        if (!newAddr) {
+            alert("Please enter a hostname or IP address.");
+            return;
+        }
+        let addresses = loadAddresses();
+        if (addresses.includes(newAddr)) {
+            alert("This address already exists.");
+            return;
+        }
+        addresses.push(newAddr);
+        saveAddresses(addresses);
+        populateDropdown();
+        populateAddressList();
+        newAddressInput.value = "";
+        newAddressInput.focus();
+    }
+
+    function removeAddress(index) {
+        let addresses = loadAddresses();
+        addresses.splice(index, 1);
+        saveAddresses(addresses);
+        populateDropdown();
+        populateAddressList();
+    }
+
+    function syncCustomHostname() {
+        if (customHostnameInput.value.trim()) {
+            hostnameDropdown.value = "";
+        }
+    }
+
+    hostnameDropdown.addEventListener("change", () => {
+        if (hostnameDropdown.value) customHostnameInput.value = "";
+    });
+
+    function submitForm(event) {
+        event.preventDefault();
+
+        const dropdownHostname = hostnameDropdown.value;
+        const customHostname = customHostnameInput.value.trim();
+        const hostname = customHostname || dropdownHostname;
+        const password = document.getElementById("password").value;
+
+        if (!hostname || !password) {
+            displayAlert("Please fill in all fields.");
+            return;
+        }
+
+        const authorizeURL =
+            `${window.location.protocol}//${hostname}:8080/authorize?hostname=${encodeURIComponent(hostname)}&pwd=${encodeURIComponent(password)}`;
+
+        const streamSrcUrl = btoa(`http://${hostname}:8080/live`);
+        const hlsUrl = `${window.location.protocol}//${hostname}:8080/viewer?url=${streamSrcUrl}&hostname=${hostname}`;
+
+        fetch(authorizeURL)
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = hlsUrl;
+                } else {
+                    throw new Error(response.statusText);
+                }
+            })
+            .catch(() => {
+                displayAlert("Failed to connect. Please check the hostname and try again.");
+                clearFields();
+            });
+    }
+
+    function displayAlert(message) {
+        alertBox.textContent = message;
+        alertBox.classList.add("show");
+        setTimeout(() => alertBox.classList.remove("show"), 4000);
+    }
+
+    function clearFields() {
+        hostnameDropdown.value = "";
+        customHostnameInput.value = "";
+        document.getElementById("password").value = "";
+    }
+
+    // Close modal if clicking outside of it or button
+    document.addEventListener("click", (event) => {
+        if (
+            addressBookModal.style.display === "block" &&
+            !addressBookModal.contains(event.target) &&
+            !addressBookBtn.contains(event.target)
+        ) {
+            closeAddressBook();
+        }
+    });
+
+    // Expose toggle function for your button's onclick
+    window.toggleAddressBook = toggleAddressBook;
+
+    document.addEventListener("DOMContentLoaded", populateDropdown);
+</script>
+
+</body>
+
+</html>
