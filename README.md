@@ -1,8 +1,5 @@
 
-<p style="display: flex; align-items: center; gap: 10px;">
-  <img src="static/logo.png" alt="Desk Decibel Logo" width="50" />
-  <span style="color: green; font-size: 2em; font-weight: bold;">Desk </span><span style="color: white; font-size: 2em; font-weight: bold;">Decibel</span>
-</p>
+# Desk Decibel
 
 **Silently informed. Effortlessly productive.**
 
@@ -81,14 +78,12 @@
 
 ## 📊 System Architecture
 
-> [Click to view the System Architecture Diagram (PDF)](Assets/Desk_Decibel.pdf)
+> [Click to view the System Architecture Diagram (PDF)](Assets/Desk_Decibel_Diagram.pdf)
 
 ---
 
 ## 🎥 Demo Video
 > 📥 [Download Desk Decibel Demo (MP4)](Assets/Desk_Decibel_Demo.mp4)
-
----
 
 ---
 
